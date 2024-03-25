@@ -30,6 +30,7 @@ let yPos = 300;
 let percentDisplay = "0";
 
 let finalColour;
+let prevColour;
 
 let image;
 
@@ -238,6 +239,9 @@ const sketch = (p5, targetColour) => {
         p5.line(colorCircleX, colorCircleY, radius * Math.cos(angle), radius * Math.sin(angle));
         p5.line(-280, slider - 200, -280, valuePickerPos);
 
+        p5.noStroke();
+        p5.fill(prevColour[0], prevColour[1], prevColour[2]);
+        p5.ellipse(250, 0, 100, 100);
       }
     }
   }
@@ -296,11 +300,13 @@ const handleGuess = async (targetColour) => {
   if (hasGuessed) {
     return;
   }
+
   // Assuming finalColour contains the guess color
   const guessColor = finalColour.toString().split(',').map(component => parseInt(component));
 
   // Assuming targetColour contains the target color
   const targetColor = targetColour.split(',').map(component => parseInt(component));
+  prevColour = targetColor;
 
   // Calculate the correctness of the guess
   correctnessValue = colourCorrectness([colorCircleX, colorCircleY, valuePickerPos], [radius, angle, slider - 200]);
@@ -381,9 +387,6 @@ export default function ColourWheel() {
           </span>
           <span>
             <button className='Button' onClick={() => handleGuess(targetColour)}>Guess</button>
-          </span>
-          <span>
-            <p>{percentDisplay}%</p>
           </span>
         </div>
         <div id='next'>
